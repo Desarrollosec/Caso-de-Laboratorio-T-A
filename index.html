@@ -17,8 +17,136 @@
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Custom CSS -->
+    <!-- Custom CSS (Tu archivo original) -->
     <link rel="stylesheet" href="styles.css">
+
+    <!-- ESTILOS INYECTADOS PARA EL LIGHTBOX MODAL -->
+    <style>
+        /* Hace que el cursor cambie al pasar por las imágenes del carrusel */
+        .carousel-track img {
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .carousel-track img:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        /* Contenedor principal del Modal */
+        .image-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .image-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .image-modal-content {
+            position: relative;
+            max-width: 85%;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Imagen del Modal */
+        .image-modal-body img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(227, 6, 19, 0.4); /* Resplandor rojo Tía */
+            border: 1px solid rgba(227, 6, 19, 0.2);
+        }
+
+        .image-modal-caption {
+            color: #fff;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        /* Botones de Control (Cerrar, Siguiente, Anterior) */
+        .image-modal-close,
+        .image-modal-nav {
+            position: absolute;
+            background: #E30613; /* Rojo Tía */
+            color: #ffffff;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            z-index: 100000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .image-modal-close:hover,
+        .image-modal-nav:hover {
+            background: #ffffff;
+            color: #E30613;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(227, 6, 19, 0.6);
+        }
+
+        /* Posicionamiento de Botones */
+        .image-modal-close {
+            top: -20px;
+            right: -20px;
+        }
+
+        .modal-prev {
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .modal-next {
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Ajustes para móviles */
+        @media (max-width: 768px) {
+            .image-modal-content {
+                max-width: 95%;
+            }
+            .image-modal-close {
+                top: -50px;
+                right: 0;
+            }
+            .modal-prev { left: 10px; }
+            .modal-next { right: 10px; }
+            .image-modal-nav {
+                background: rgba(227, 6, 19, 0.9);
+            }
+        }
+    </style>
 </head>
 <body class="dark-mode">
 
@@ -111,7 +239,6 @@
             </div>
 
             <div class="grid-4 mb-40">
-                <!-- Card 1 -->
                 <div class="neon-card hover-zoom">
                     <div class="card-icon"><i class="fa-solid fa-store"></i></div>
                     <h3>Retail de Cercanía 2026</h3>
@@ -119,7 +246,6 @@
                     <div class="card-footer-tag">Contexto de Mercado</div>
                 </div>
 
-                <!-- Card 2 -->
                 <div class="neon-card hover-zoom">
                     <div class="card-icon card-icon-danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <h3>Problema Identificado</h3>
@@ -127,7 +253,6 @@
                     <div class="card-footer-tag">Saturación de Ofertas</div>
                 </div>
 
-                <!-- Card 3 -->
                 <div class="neon-card hover-zoom">
                     <div class="card-icon card-icon-success"><i class="fa-solid fa-lightbulb"></i></div>
                     <h3>Oportunidad Detectada</h3>
@@ -135,7 +260,6 @@
                     <div class="card-footer-tag">Oportunidad Única</div>
                 </div>
 
-                <!-- Card 4 -->
                 <div class="neon-card hover-zoom">
                     <div class="card-icon"><i class="fa-solid fa-people-group"></i></div>
                     <h3>Público Objetivo</h3>
@@ -192,7 +316,6 @@
                 <p class="section-subtitle">Evidencias empíricas cuantitativas y cualitativas levantadas para sustentar la propuesta.</p>
             </div>
 
-            <!-- Metodología de Investigación Banner -->
             <div class="research-methodology-card neon-card mb-40">
                 <div class="grid-2 align-center">
                     <div>
@@ -214,7 +337,6 @@
                 </div>
             </div>
 
-            <!-- Insight Rector Section -->
             <div class="insight-banner text-center">
                 <div class="insight-tag animate-pulse mb-20">
                     <i class="fa-solid fa-quote-left"></i> INSIGHT ESTRATÉGICO DEL CONSUMIDOR
@@ -236,9 +358,7 @@
                 <p class="section-subtitle">Estructuración cuantitativa del reto y concepto estratégico "Tía Te Avisa".</p>
             </div>
 
-            <!-- Goal Structure Grid -->
             <div class="grid-2 mb-50">
-                <!-- Objetivo General -->
                 <div class="neon-card border-red">
                     <div class="card-icon"><i class="fa-solid fa-bullseye"></i></div>
                     <h3>Objetivo General</h3>
@@ -247,7 +367,6 @@
                     </p>
                 </div>
 
-                <!-- Objetivos Específicos -->
                 <div class="neon-card border-red">
                     <div class="card-icon card-icon-success"><i class="fa-solid fa-list-check"></i></div>
                     <h3>Objetivos Específicos</h3>
@@ -268,7 +387,6 @@
                 </div>
             </div>
 
-            <!-- Concepto Central -->
             <div class="concept-card neon-card text-center">
                 <span class="badge-neon mb-10">CONCEPTO CENTRAL</span>
                 <h3>TÍA TE AVISA</h3>
@@ -294,7 +412,7 @@
         </div>
     </section>
 
-    <!-- 5. ESTRATEGIA Y EJECUCIÓN (PROTOTIPOS & SIMULADOR) -->
+    <!-- 5. ESTRATEGIA Y EJECUCIÓN -->
     <section id="estrategia" class="section">
         <div class="container">
             <div class="section-header text-center">
@@ -303,9 +421,7 @@
                 <p class="section-subtitle">Acciones principales, canales de contacto y simulador interactivo de WhatsApp Barrial.</p>
             </div>
 
-            <!-- Interactive Combos Switcher -->
             <div class="combos-grid grid-4 mb-40">
-                <!-- Combo Almuerzo -->
                 <div class="combo-card combo-verde active-combo" data-combo="almuerzo">
                     <div class="combo-badge badge-verde">11h00 - 14h00</div>
                     <div class="combo-icon"><i class="fa-solid fa-utensils"></i></div>
@@ -314,8 +430,6 @@
                     <p class="combo-items">Pollo entero + Arroz + Aceite + Vegetales</p>
                     <span class="combo-tag">Señalética Verde</span>
                 </div>
-
-                <!-- Combo Merienda -->
                 <div class="combo-card combo-naranja" data-combo="merienda">
                     <div class="combo-badge badge-naranja">16h00 - 18h00</div>
                     <div class="combo-icon"><i class="fa-solid fa-mug-hot"></i></div>
@@ -324,8 +438,6 @@
                     <p class="combo-items">Pan especial + Yogurt + Queso + Jugo</p>
                     <span class="combo-tag">Señalética Naranja</span>
                 </div>
-
-                <!-- Combo Cena Rápida -->
                 <div class="combo-card combo-azul" data-combo="cena">
                     <div class="combo-badge badge-azul">18h00 - 20h00</div>
                     <div class="combo-icon"><i class="fa-solid fa-bowl-food"></i></div>
@@ -334,8 +446,6 @@
                     <p class="combo-items">Pasta + Atún + Salsa de Tomate + Conservas</p>
                     <span class="combo-tag">Señalética Azul</span>
                 </div>
-
-                <!-- Combo Quincena -->
                 <div class="combo-card combo-morado" data-combo="quincena">
                     <div class="combo-badge badge-morado">Días 1 al 5</div>
                     <div class="combo-icon"><i class="fa-solid fa-basket-shopping"></i></div>
@@ -346,7 +456,6 @@
                 </div>
             </div>
 
-            <!-- WhatsApp Simulator Showcase -->
             <div class="whatsapp-showcase neon-card mb-50">
                 <div class="grid-2 align-center">
                     <div class="phone-mockup-container">
@@ -408,7 +517,6 @@
                 <p class="section-subtitle">Etapas, cronograma ágil a 3 meses y optimización presupuestaria del proyecto.</p>
             </div>
 
-            <!-- Gantt Chart Wrapper -->
             <div class="gantt-wrapper neon-card mb-50">
                 <h3><i class="fa-solid fa-calendar-days"></i> Cronograma por Etapas (Diagrama de Gantt)</h3>
                 <p class="mb-30 text-muted">Despliegue ágil en 3 trimestres de ejecución táctica.</p>
@@ -421,7 +529,6 @@
                         <div class="gantt-col-month">Mes 3: Escala</div>
                     </div>
 
-                    <!-- Row 1 -->
                     <div class="gantt-row">
                         <div class="gantt-task-name">Configuración CRM & WhatsApp API</div>
                         <div class="gantt-bar-container">
@@ -429,7 +536,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 2 -->
                     <div class="gantt-row">
                         <div class="gantt-task-name">Producción de Señalética Cromática</div>
                         <div class="gantt-bar-container">
@@ -437,7 +543,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 3 -->
                     <div class="gantt-row">
                         <div class="gantt-task-name">Lanzamiento Piloto (Sector Controlado)</div>
                         <div class="gantt-bar-container">
@@ -445,7 +550,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 4 -->
                     <div class="gantt-row">
                         <div class="gantt-task-name">Campaña de Pauta Digital (Ads Meta/TikTok)</div>
                         <div class="gantt-bar-container">
@@ -453,7 +557,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 5 -->
                     <div class="gantt-row">
                         <div class="gantt-task-name">Optimización de Métricas & Expansión</div>
                         <div class="gantt-bar-container">
@@ -463,7 +566,6 @@
                 </div>
             </div>
 
-            <!-- Budget Chart & Financial Breakdown -->
             <div class="grid-2 align-center">
                 <div class="neon-card chart-card">
                     <h3><i class="fa-solid fa-chart-pie"></i> Presupuesto Mensual ($3,450 USD)</h3>
@@ -527,7 +629,7 @@
         </div>
     </section>
 
-    <!-- 7. INDICADORES Y EVALUACIÓN (KPIS DE 3 NIVELES) -->
+    <!-- 7. INDICADORES Y EVALUACIÓN -->
     <section id="kpis" class="section">
         <div class="container">
             <div class="section-header text-center">
@@ -536,7 +638,6 @@
                 <p class="section-subtitle">Evaluación estructurada en tres niveles: Gestión, Resultado e Impacto.</p>
             </div>
 
-            <!-- Nivel 1: Indicadores de Gestión -->
             <div class="kpi-level-block mb-40">
                 <h3 class="kpi-level-title"><i class="fa-solid fa-list-check text-red"></i> 1. Indicadores de Gestión</h3>
                 <div class="grid-2">
@@ -562,7 +663,6 @@
                 </div>
             </div>
 
-            <!-- Nivel 2: Indicadores de Resultado -->
             <div class="kpi-level-block mb-40">
                 <h3 class="kpi-level-title"><i class="fa-solid fa-chart-line-up text-red"></i> 2. Indicadores de Resultado</h3>
                 <div class="grid-2">
@@ -588,7 +688,6 @@
                 </div>
             </div>
 
-            <!-- Nivel 3: Indicadores de Impacto -->
             <div class="kpi-level-block">
                 <h3 class="kpi-level-title"><i class="fa-solid fa-trophy text-red"></i> 3. Indicadores de Impacto</h3>
                 <div class="grid-2">
@@ -616,7 +715,7 @@
         </div>
     </section>
 
-    <!-- 8. EVIDENCIAS VISUALES (DINÁMICO CON GOOGLE SHEETS) -->
+    <!-- 8. EVIDENCIAS VISUALES -->
     <section id="evidencias" class="section">
         <div class="container">
             <div class="section-header text-center">
@@ -625,12 +724,10 @@
                 <p class="section-subtitle">Demostración interactiva loopeada sincronizada en tiempo real mediante Google Sheets CSV.</p>
             </div>
 
-            <!-- CSV Status Banner -->
             <div class="csv-status-banner mb-30" id="csv-status-banner">
                 <i class="fa-solid fa-sync fa-spin"></i> Conectando con Google Sheets CSV...
             </div>
 
-            <!-- Category 1: WhatsApp -->
             <div class="category-carousel-block mb-50">
                 <h3 class="category-title"><i class="fa-brands fa-whatsapp text-red"></i> Prototipos de WhatsApp Barrial</h3>
                 <div class="carousel-container" id="carousel-whatsapp">
@@ -638,7 +735,6 @@
                 </div>
             </div>
 
-            <!-- Category 2: Redes -->
             <div class="category-carousel-block mb-50">
                 <h3 class="category-title"><i class="fa-brands fa-instagram text-red"></i> Campañas en Redes Sociales (Post / Reels)</h3>
                 <div class="carousel-container" id="carousel-redes">
@@ -646,7 +742,6 @@
                 </div>
             </div>
 
-            <!-- Category 3: Señalética -->
             <div class="category-carousel-block mb-50">
                 <h3 class="category-title"><i class="fa-solid fa-tags text-red"></i> Señalética en Perchas por Color (Phygital)</h3>
                 <div class="carousel-container" id="carousel-senaletica">
@@ -654,7 +749,6 @@
                 </div>
             </div>
 
-            <!-- Category 4: QR -->
             <div class="category-carousel-block">
                 <h3 class="category-title"><i class="fa-solid fa-qrcode text-red"></i> Landing Mobile & Códigos QR</h3>
                 <div class="carousel-container" id="carousel-qr">
@@ -664,14 +758,13 @@
         </div>
     </section>
 
-    <!-- 9. TOMA DE DECISIONES ESTRATÉGICAS Y CIERRE -->
+    <!-- 9. TOMA DE DECISIONES Y CIERRE -->
     <section id="cierre" class="section cierre-section text-center">
         <div class="cierre-glow"></div>
         <div class="container">
             <div class="section-badge mb-10">MÓDULO 9</div>
             <h2 class="cierre-title">Toma de Decisiones Estratégicas & Cierre</h2>
 
-            <!-- Decision Justifications Card -->
             <div class="decisions-card neon-card text-left mb-40">
                 <h3><i class="fa-solid fa-brain text-red"></i> Justificación de Decisiones Respaldadas en Datos</h3>
                 <p class="decisions-quote">
@@ -731,7 +824,86 @@
         </div>
     </div>
 
-    <!-- Custom JavaScript -->
+    <!-- SCRIPT ORIGINAL + INYECCIÓN LÓGICA DEL MODAL LIGHTBOX -->
+    <script>
+        // Si tienes código anterior en tu script.js, puedes pegarlo justo aquí arriba
+        // Y aquí debajo está la lógica fresca para tu modal de imágenes dinámicas
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Seleccionar elementos del DOM
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalCaption = document.getElementById('modal-caption');
+            const closeBtn = document.getElementById('modal-close-btn');
+            const prevBtn = document.getElementById('modal-prev-btn');
+            const nextBtn = document.getElementById('modal-next-btn');
+
+            let currentImages = [];
+            let currentIndex = 0;
+
+            // Delegación de eventos para capturar clicks de imágenes que cargan después (ej: tu CSV)
+            document.addEventListener('click', (e) => {
+                const imgTarget = e.target.closest('.carousel-track img');
+                
+                if (imgTarget) {
+                    const track = imgTarget.closest('.carousel-track');
+                    currentImages = Array.from(track.querySelectorAll('img'));
+                    currentIndex = currentImages.indexOf(imgTarget);
+
+                    mostrarImagen(currentIndex);
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden'; 
+                }
+            });
+
+            // Función para pintar la imagen
+            function mostrarImagen(index) {
+                if (currentImages.length === 0) return;
+
+                if (index < 0) {
+                    currentIndex = currentImages.length - 1;
+                } else if (index >= currentImages.length) {
+                    currentIndex = 0;
+                } else {
+                    currentIndex = index;
+                }
+
+                const img = currentImages[currentIndex];
+                modalImg.src = img.src;
+                modalCaption.textContent = img.alt || "Prototipo Tía Te Avisa";
+            }
+
+            // Cerrar el modal
+            function cerrarModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(() => { modalImg.src = ''; }, 300);
+            }
+
+            closeBtn.addEventListener('click', cerrarModal);
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal || e.target.classList.contains('image-modal-body')) {
+                    cerrarModal();
+                }
+            });
+
+            // Botones Anterior y Siguiente
+            prevBtn.addEventListener('click', () => mostrarImagen(currentIndex - 1));
+            nextBtn.addEventListener('click', () => mostrarImagen(currentIndex + 1));
+
+            // Teclado (Esc y flechas)
+            document.addEventListener('keydown', (e) => {
+                if (!modal.classList.contains('active')) return;
+                
+                if (e.key === 'Escape') cerrarModal();
+                if (e.key === 'ArrowLeft') mostrarImagen(currentIndex - 1);
+                if (e.key === 'ArrowRight') mostrarImagen(currentIndex + 1);
+            });
+        });
+    </script>
+
+    <!-- Mantuve también el link a tu script original por si ahí está tu lógica de Chart.js y Google Sheets -->
     <script src="script.js"></script>
 </body>
 </html>
